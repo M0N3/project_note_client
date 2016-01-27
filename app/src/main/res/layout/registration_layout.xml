@@ -8,14 +8,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/tittleText"
-            android:id="@+id/tittleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+            android:text="@string/titleText"
+            android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
-            android:id="@+id/loginView" android:layout_below="@+id/tittleView" android:layout_centerHorizontal="true"
+            android:id="@+id/loginView" android:layout_below="@+id/titleView" android:layout_centerHorizontal="true"
             android:layout_marginTop="102dp"/>
     <EditText
             android:layout_width="match_parent"

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:id="@+id/note"
+          android:title="@string/search_tittle"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_note_text"
+          app:showAsAction="ifRoom"
+    />
+    <item android:id="@+id/label"
+          android:title="@string/search_tittle"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_label_outline"
+          app:showAsAction="ifRoom"
+    />
+    <item android:id="@+id/search"
+          android:title="@string/search_tittle"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_magnify"
+          app:showAsAction="ifRoom"
+    />
+</menu>

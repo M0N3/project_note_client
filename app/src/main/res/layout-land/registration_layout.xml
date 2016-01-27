@@ -3,6 +3,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -14,8 +15,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
-            android:id="@+id/loginView" android:layout_below="@+id/titleView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="102dp"/>
+            android:id="@+id/loginView"
+            android:layout_below="@+id/titleView" android:layout_alignLeft="@+id/titleView"
+            android:layout_alignStart="@+id/titleView" android:layout_marginTop="21dp"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,27 +34,31 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/passwordEdit" android:layout_below="@+id/passworView" android:layout_centerHorizontal="true"/>
+            android:id="@+id/passwordEdit"
+            android:layout_above="@+id/exceptionView" android:layout_toLeftOf="@+id/exceptionView"
+            android:layout_toStartOf="@+id/exceptionView"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/exceptionInRegistrationText"
             android:id="@+id/exceptionView"
-            android:layout_marginTop="24dp"
-            android:layout_below="@+id/passwordEdit" android:layout_alignLeft="@+id/passworView"
-            android:layout_alignStart="@+id/passworView"/>
+            android:layout_above="@+id/acceptRegistrationbtn" android:layout_alignLeft="@+id/passworView"
+            android:layout_alignStart="@+id/passworView" android:layout_marginBottom="15dp"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/password2Edit"
+            android:layout_alignTop="@+id/passwordEdit" android:layout_toRightOf="@+id/passworView"
+            android:layout_toEndOf="@+id/passworView"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signinbtn"
-            android:id="@+id/signinbtn" android:layout_below="@+id/exceptionView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" android:onClick="signInClick"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/registrationbtn"
-            android:id="@+id/registrationbtn"
-            android:layout_marginTop="27dp" android:layout_below="@+id/signinbtn"
-            android:layout_centerHorizontal="true" android:onClick="registrationClick"/>
+            android:text="@string/acceptRegistrationText"
+            android:id="@+id/acceptRegistrationbtn"
+            android:onClick="signInClick"
+            android:layout_alignParentBottom="true" android:layout_alignRight="@+id/exceptionView"
+            android:layout_alignEnd="@+id/exceptionView" android:layout_marginBottom="25dp"/>
 </RelativeLayout>

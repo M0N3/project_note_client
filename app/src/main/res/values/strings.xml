@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Project_Note</string>
-    <string name="tittleText">NOTE</string>
+    <string name="titleText">PROJECT NOTE</string>
     <string name="acceptRegistrationText">Accept</string>
     <string name="exceptionInRegistrationText">Exception</string>
     <string name="passwordText">Password:</string>
     <string name="loginText">Login:</string>
     <string name="signinbtn">Sign in</string>
     <string name="registrationbtn">Registration</string>
+    <string name="search_tittle">search</string>
 </resources>

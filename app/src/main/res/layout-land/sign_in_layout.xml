@@ -14,45 +14,55 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
-            android:id="@+id/loginView" android:layout_below="@+id/titleView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="102dp"/>
+            android:id="@+id/loginView"
+            android:layout_marginTop="26dp"
+            android:layout_marginLeft="66dp" android:layout_marginStart="66dp"
+            android:layout_below="@+id/titleView" android:layout_alignLeft="@+id/loginEdit"
+            android:layout_alignStart="@+id/loginEdit"/>
     <EditText
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/loginEdit" android:layout_below="@+id/loginView" android:layout_centerHorizontal="true"
-            android:inputType="text"/>
+            android:id="@+id/loginEdit"
+            android:inputType="text"
+            android:width="200dp" android:layout_below="@+id/loginView" android:layout_toLeftOf="@+id/registrationbtn"
+            android:layout_toStartOf="@+id/registrationbtn"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/passwordText"
-            android:id="@+id/passworView" android:layout_below="@+id/loginEdit" android:layout_centerHorizontal="true"/>
+            android:id="@+id/passworView"
+            android:layout_marginRight="52dp"
+            android:layout_marginEnd="52dp" android:layout_alignTop="@+id/loginView"
+            android:layout_alignRight="@+id/passwordEdit" android:layout_alignEnd="@+id/passwordEdit"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/passwordEdit" android:layout_below="@+id/passworView" android:layout_centerHorizontal="true"/>
+            android:id="@+id/passwordEdit"
+            android:layout_below="@+id/passworView" android:layout_toRightOf="@+id/registrationbtn"
+            android:layout_toEndOf="@+id/registrationbtn"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/exceptionInRegistrationText"
             android:id="@+id/exceptionView"
-            android:layout_marginTop="24dp"
-            android:layout_below="@+id/passwordEdit" android:layout_alignLeft="@+id/passworView"
-            android:layout_alignStart="@+id/passworView"/>
+            android:layout_centerVertical="true" android:layout_alignLeft="@+id/signinbtn"
+            android:layout_alignStart="@+id/signinbtn"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signinbtn"
-            android:id="@+id/signinbtn" android:layout_below="@+id/exceptionView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" android:onClick="signInClick"/>
+            android:id="@+id/signinbtn"
+            android:onClick="signInClick"
+            android:layout_below="@+id/exceptionView" android:layout_centerHorizontal="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/registrationbtn"
             android:id="@+id/registrationbtn"
-            android:layout_marginTop="27dp" android:layout_below="@+id/signinbtn"
-            android:layout_centerHorizontal="true" android:onClick="registrationClick"/>
+            android:onClick="registrationClick" android:layout_below="@+id/signinbtn"
+            android:layout_centerHorizontal="true"/>
 </RelativeLayout>
