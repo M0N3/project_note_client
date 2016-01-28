@@ -4,19 +4,19 @@
 
 
     <item android:id="@+id/note"
-          android:title="@string/search_tittle"
+          android:title="@string/note_title"
           android:orderInCategory="1"
           android:icon="@mipmap/ic_note_text"
           app:showAsAction="ifRoom"
     />
     <item android:id="@+id/label"
-          android:title="@string/search_tittle"
+          android:title="@string/label_title"
           android:orderInCategory="1"
-          android:icon="@mipmap/ic_label_outline"
+          android:icon="@mipmap/ic_tag_text_outline"
           app:showAsAction="ifRoom"
     />
     <item android:id="@+id/search"
-          android:title="@string/search_tittle"
+          android:title="@string/search_title"
           android:orderInCategory="1"
           android:icon="@mipmap/ic_magnify"
           app:showAsAction="ifRoom"

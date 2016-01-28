@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/titleText"
+            android:textColor="@color/colorWhite"
             android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
     <TextView
             android:layout_width="wrap_content"
@@ -16,11 +18,13 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
             android:id="@+id/loginView"
+            android:textColor="@color/colorWhite"
             android:layout_below="@+id/titleView" android:layout_alignLeft="@+id/titleView"
             android:layout_alignStart="@+id/titleView" android:layout_marginTop="21dp"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/Theme.App.Base"
             android:id="@+id/loginEdit" android:layout_below="@+id/loginView" android:layout_centerHorizontal="true"
             android:inputType="text"/>
     <TextView
@@ -28,12 +32,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/passwordText"
+            android:textColor="@color/colorWhite"
             android:id="@+id/passworView" android:layout_below="@+id/loginEdit" android:layout_centerHorizontal="true"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
+            android:theme="@style/Theme.App.Base"
             android:id="@+id/passwordEdit"
             android:layout_above="@+id/exceptionView" android:layout_toLeftOf="@+id/exceptionView"
             android:layout_toStartOf="@+id/exceptionView"/>
@@ -42,6 +48,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/exceptionInRegistrationText"
+            android:textColor="@color/colorWhite"
             android:id="@+id/exceptionView"
             android:layout_above="@+id/acceptRegistrationbtn" android:layout_alignLeft="@+id/passworView"
             android:layout_alignStart="@+id/passworView" android:layout_marginBottom="15dp"/>
@@ -50,6 +57,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
+            android:theme="@style/Theme.App.Base"
             android:id="@+id/password2Edit"
             android:layout_alignTop="@+id/passwordEdit" android:layout_toRightOf="@+id/passworView"
             android:layout_toEndOf="@+id/passworView"/>

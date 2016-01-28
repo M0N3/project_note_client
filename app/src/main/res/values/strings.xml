@@ -7,5 +7,10 @@
     <string name="loginText">Login:</string>
     <string name="signinbtn">Sign in</string>
     <string name="registrationbtn">Registration</string>
-    <string name="search_tittle">search</string>
+    <string name="search_title">search</string>
+    <string name="note_title">Note</string>
+    <string name="label_title">Label</string>
+    <string name="sign_out_title">Sign out</string>
+    <string name="exit_title">Exit</string>
+    <string name="username_title">HELLO USERNAME!</string>
 </resources>
