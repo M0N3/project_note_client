@@ -1,0 +1,33 @@
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/note_create__layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/toolbarGreen"
+        android:fitsSystemWindows="true">
+        <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" android:id="@+id/view">
+            <android.support.v7.widget.Toolbar
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/note_toolbar"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_width="match_parent"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                    android:background="@color/toolbarGreen">
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+    <EditText
+            android:theme="@style/Theme.App.Base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText" android:layout_below="@+id/view" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:singleLine="true"/>
+    <EditText
+            android:theme="@style/Theme.App.Base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2" android:layout_below="@+id/editText" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" android:autoText="false" android:singleLine="false"/>
+</RelativeLayout>

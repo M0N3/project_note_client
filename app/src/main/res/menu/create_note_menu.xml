@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/note_access"
+          android:title="@string/note_access"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_lock_outline"
+          app:showAsAction="always"
+    />
+    <item android:id="@+id/note_label"
+          android:title="@string/note_label"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_tag_text_outline"
+          app:showAsAction="always"
+    />
+    <item android:id="@+id/note_color"
+          android:title="@string/note_color"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_format_color_fill"
+          app:showAsAction="always"
+    />
+    <item android:id="@+id/add_note"
+          android:title="@string/add_note"
+          android:orderInCategory="1"
+          android:icon="@mipmap/ic_check"
+          app:showAsAction="always"
+    />
+</menu>

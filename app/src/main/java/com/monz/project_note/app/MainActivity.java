@@ -1,6 +1,7 @@
 package com.monz.project_note.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+    }
+
+    public void onFABClick(View v) {
+        Intent intent = new Intent(this, CreateNoteActivity.class);
+        startActivity(intent);
     }
 
     public void registrationClick(View v) {
