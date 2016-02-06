@@ -17,12 +17,13 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
             android:textColor="@color/colorWhite"
-            android:id="@+id/loginView" android:layout_below="@+id/titleView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="102dp"/>
+            android:id="@+id/loginView"
+            android:layout_marginTop="105dp" android:layout_below="@+id/titleView"
+            android:layout_centerHorizontal="true"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/loginEdit" android:layout_below="@+id/loginView" android:layout_centerHorizontal="true"
+            android:id="@+id/loginEdit" android:layout_below="@id/loginView" android:layout_centerHorizontal="true"
             android:inputType="text"
             android:theme="@style/Theme.App.Base"/>
     <TextView
@@ -31,36 +32,31 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/passwordText"
             android:textColor="@color/colorWhite"
-            android:id="@+id/passworView" android:layout_below="@+id/loginEdit" android:layout_centerHorizontal="true"/>
+            android:id="@+id/passwordView"
+            android:layout_marginTop="44dp" android:layout_below="@+id/loginEdit"
+            android:layout_centerHorizontal="true"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/passwordEdit" android:layout_below="@+id/passworView"
-            android:layout_centerHorizontal="true"
-            android:theme="@style/Theme.App.Base"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/exceptionInRegistrationText"
-            android:textColor="@color/colorWhite"
-            android:id="@+id/exceptionView"
-            android:layout_marginTop="24dp"
-            android:layout_below="@+id/passwordEdit" android:layout_alignLeft="@+id/passworView"
-            android:layout_alignStart="@+id/passworView"/>
+            android:id="@+id/passwordEdit"
+            android:theme="@style/Theme.App.Base" android:layout_below="@+id/passwordView"
+            android:layout_centerHorizontal="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/signinbtn"
-            android:id="@+id/signinbtn" android:layout_below="@+id/exceptionView" android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp" android:onClick="signInClick"/>
+            android:id="@+id/signinbtn"
+            android:onClick="signInClick"
+            android:layout_marginBottom="44dp" android:layout_above="@+id/registrationbtn"
+            android:layout_centerHorizontal="true"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/registrationbtn"
             android:id="@+id/registrationbtn"
-            android:layout_marginTop="27dp" android:layout_below="@+id/signinbtn"
-            android:layout_centerHorizontal="true" android:onClick="registrationClick"/>
+            android:onClick="registrationClick"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
+            android:layout_marginBottom="23dp"/>
 </RelativeLayout>

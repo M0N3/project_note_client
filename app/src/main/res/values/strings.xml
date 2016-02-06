@@ -12,9 +12,11 @@
     <string name="label_title">Label</string>
     <string name="sign_out_title">Sign out</string>
     <string name="exit_title">Exit</string>
-    <string name="username_title">HELLO USERNAME!</string>
     <string name="note_color">color</string>
     <string name="note_label">label</string>
     <string name="add_note">added</string>
     <string name="note_access">access</string>
+    <string name="empty"></string>
+    <string name="note_delete">delete</string>
+    <string name="server_url">http://192.168.1.3:8080</string>
 </resources>

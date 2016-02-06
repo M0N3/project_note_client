@@ -4,5 +4,7 @@
     <color name="toolbarGreen">#66bb6a</color>
     <color name="mainBackground">#e2e2e2</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="black">#191919</color>
+    <color name="item_background">#66bb6a</color>
 
 </resources>

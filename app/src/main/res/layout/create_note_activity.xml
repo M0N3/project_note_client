@@ -12,6 +12,7 @@
             <android.support.v7.widget.Toolbar
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/note_toolbar"
+                    android:title="@string/empty"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_width="match_parent"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark"
@@ -19,15 +20,21 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
     <EditText
+            android:imeOptions="flagNoExtractUi"
             android:theme="@style/Theme.App.Base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText" android:layout_below="@+id/view" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:singleLine="true"/>
+            android:id="@+id/editTitle"
+            android:singleLine="true"
+            android:layout_below="@+id/view" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
     <EditText
+            android:imeOptions="flagNoExtractUi"
             android:theme="@style/Theme.App.Base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText2" android:layout_below="@+id/editText" android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" android:autoText="false" android:singleLine="false"/>
+            android:id="@+id/editTextContent"
+            android:autoText="false" android:singleLine="false"
+            android:layout_below="@+id/editTitle" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 </RelativeLayout>
