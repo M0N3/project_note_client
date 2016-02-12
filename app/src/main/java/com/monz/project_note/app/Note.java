@@ -2,6 +2,9 @@ package com.monz.project_note.app;
 
 import android.graphics.Color;
 
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
 /**
  * Created by Андрей on 29.01.2016.
  */
@@ -15,6 +18,11 @@ public class Note {
     private String date;
     private int id;
     private static int uniq = 0;
+    private ArrayList<String> labels;
+
+    public ArrayList<String> getLabels() {
+        return labels;
+    }
 
     public int getId() {
         return id;
@@ -45,13 +53,14 @@ public class Note {
         return date;
     }
 
-    public Note(String title, String text, boolean common_access, String color, String author, String date) {
+    public Note(String title, String text, boolean common_access, String color, String author, String date, ArrayList<String> labels) {
         this.title = title;
         this.text = text;
         this.common_access = common_access;
         this.color = color;
         this.author = author;
         this.date = date;
+        this.labels = labels;
         uniq++;
         id = uniq;
     }

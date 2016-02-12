@@ -3,17 +3,23 @@
     <item
             android:title="@string/note_title"
             android:orderInCategory="1"
-            android:icon="@mipmap/ic_note_text"/>
+            android:icon="@mipmap/ic_note_text"
+    android:id="@+id/menu_note_item"/>
     <item
             android:title="@string/label_title"
             android:orderInCategory="1"
-            android:icon="@mipmap/ic_tag_text_outline"/>
+            android:icon="@mipmap/ic_tag_text_outline"
+            android:id="@+id/menu_label_item"/>
     <item
             android:title="@string/sign_out_title"
             android:orderInCategory="1"
-            android:icon="@mipmap/ic_exit_to_app"/>
+            android:icon="@mipmap/ic_exit_to_app"
+            android:id="@+id/menu_sign_out_item"
+    />
     <item
             android:title="@string/exit_title"
             android:orderInCategory="1"
-            android:icon="@mipmap/ic_close_circle_outline"/>
+            android:icon="@mipmap/ic_close_circle_outline"
+            android:id="@+id/menu_exit_item"
+    />
 </menu>
