@@ -1,4 +1,4 @@
-package com.monz.project_note.app.Adapter;
+package com.monz.project_note.app.adapter;
 
 import android.app.Activity;
 import android.content.Context;

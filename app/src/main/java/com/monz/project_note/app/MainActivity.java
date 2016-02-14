@@ -8,12 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.monz.project_note.app.Adapter.NoteListAdapter;
+import com.monz.project_note.app.adapter.NoteListAdapter;
+import com.monz.project_note.app.database.NoteDBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private NoteListAdapter nla;
     private NavigationView nv;
 
+    private NoteDBHelper noteDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +41,40 @@ public class MainActivity extends AppCompatActivity {
         rv = (RecyclerView) findViewById(R.id.mainRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(layoutManager);
-        list = new ArrayList<>();
+        noteDBHelper = new NoteDBHelper(getApplicationContext());
+        list = noteDBHelper.getNotes(getIntent().getStringExtra("name"));
+        nla = new NoteListAdapter(list, this);
+        nla.setOnItemClickListener(new NoteListAdapter.MyClickListener() {
+            @Override
+            public void onItemClick(int position, View v, NoteListAdapter.NoteViewHolder nvl) {
+                for (Note n : list) {
+                    if (n.getId() == nvl.getUniq()) {
+                        Intent intent = new Intent(MainActivity.this, CreateNoteActivity.class);
+                        intent.putExtra("new", false);
+                        intent.putExtra("access", n.isCommon_access());
+                        intent.putExtra("title", n.getTitle());
+                        intent.putExtra("text", n.getText());
+                        intent.putExtra("color", n.getColor());
+                        Toast.makeText(MainActivity.this, Integer.toString(n.getId()), Toast.LENGTH_SHORT).show();
+                        intent.putExtra("id", n.getId());
+                        NEW = false;
+                        changed_note = n;
+                        list.remove(n);
+                        list.add(0, changed_note);
+                        Log.i("TAG", "ONCLICK");
+                        intent.putStringArrayListExtra("labels", n.getLabels());
+                        startActivityForResult(intent, 1);
+                        break;
+                    }
+                }
+            }
+        });
+        rv.setAdapter(nla);
         nv = (NavigationView) findViewById(R.id.navigation);
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                switch(item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.menu_exit_item:
                         moveTaskToBack(true);
                         System.exit(0);
@@ -83,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDrawerStateChanged(int newState) {
             }
         });
+
     }
 
 
@@ -99,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.note:
-                    return true;
+                        return true;
                     case R.id.search:
                         return true;
                     case R.id.label:
@@ -120,64 +152,54 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    private boolean NEW;
+    private Note changed_note;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("TAG", "ONRESULT");
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null)
             return;
         boolean delete = data.getBooleanExtra("delete", false);
-        if (delete)
+        if (delete) {
+            if (!NEW) {
+                list.remove(changed_note);
+                nla = new NoteListAdapter(list, this);
+                rv.setAdapter(nla);
+                noteDBHelper.deleteNote(changed_note);
+            }
             return;
+        }
+
         String title = data.getStringExtra("title");
         String text = data.getStringExtra("text");
         String date = data.getStringExtra("date");
         ArrayList<String> labels = data.getStringArrayListExtra("labels");
         boolean access = data.getBooleanExtra("access", true);
         String color = data.getStringExtra("color");
-        LinearLayoutManager mn = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        nla = new NoteListAdapter(list, this);
-
-        if (getIntent().getBooleanExtra("change", false)) {
-            for (Note n : list) {
-                if (n.getId() == getIntent().getIntExtra("id", -1)) {
-                    list.remove(n);
-                    break;
-                }
-            }
+        if (NEW) {
+            Note note = new Note(title, text, access, color, getIntent().getStringExtra("name"), date, labels);
+            Log.i("TAG", "TITLE " + title);
+            list.add(0, note);
+            noteDBHelper.addNote(note);
+        } else {
+            changed_note.setColor(color);
+            changed_note.setText(text);
+            changed_note.setTitle(title);
+            changed_note.setCommon_access(access);
+            changed_note.setLabels(labels);
+            noteDBHelper.updateNote(changed_note);
+            Log.i("TAG", "CHANGED");
         }
-        list.add(0, new Note(title, text, access, color, getIntent().getStringExtra("name"), date, labels));
-        LinearLayout layout = (LinearLayout) findViewById(R.id.label_layout);
+        nla = new NoteListAdapter(list, this);
         rv.setAdapter(nla);
-
-
-        nla.setOnItemClickListener(new NoteListAdapter.MyClickListener() {
-            @Override
-            public void onItemClick(int position, View v, NoteListAdapter.NoteViewHolder nvl) {
-                for (Note n : list) {
-                    if (n.getId() == nvl.getUniq()) {
-
-                        Intent intent = new Intent(MainActivity.this, CreateNoteActivity.class);
-                        intent.putExtra("new", false);
-                        intent.putExtra("access", n.isCommon_access());
-                        intent.putExtra("title", n.getTitle());
-                        intent.putExtra("text", n.getText());
-                        intent.putExtra("color", n.getColor());
-                        intent.putExtra("id", n.getId());
-                        intent.putStringArrayListExtra("labels", n.getLabels());
-                        startActivityForResult(intent, 1);
-                        break;
-                    }
-                }
-                nla.removeAt(position);
-            }
-        });
-
     }
-
 
     public void onFABClick(View v) {
         Intent intent = new Intent(this, CreateNoteActivity.class);
         intent.putExtra("name", getIntent().getStringExtra("name"));
+        NEW = true;
         intent.putExtra("new", true);
         startActivityForResult(intent, 1);
 

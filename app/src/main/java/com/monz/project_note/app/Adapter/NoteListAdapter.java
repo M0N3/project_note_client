@@ -1,4 +1,4 @@
-package com.monz.project_note.app.Adapter;
+package com.monz.project_note.app.adapter;
 
 
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.monz.project_note.app.Note;
 import com.monz.project_note.app.R;
-import org.w3c.dom.Text;
 
 import java.util.List;
 

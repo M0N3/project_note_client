@@ -1,4 +1,4 @@
-package com.monz.project_note.app.Adapter;
+package com.monz.project_note.app.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

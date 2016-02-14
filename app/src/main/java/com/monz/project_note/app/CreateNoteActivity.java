@@ -1,38 +1,25 @@
 package com.monz.project_note.app;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.monz.project_note.app.Adapter.CustomAlertAdapter;
-import com.monz.project_note.app.Adapter.LabelListAdapter;
-import com.monz.project_note.app.Adapter.NoteListAdapter;
+import com.monz.project_note.app.adapter.CustomAlertAdapter;
+import com.monz.project_note.app.adapter.LabelListAdapter;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -125,7 +112,6 @@ public class CreateNoteActivity extends AppCompatActivity implements AdapterView
         intent.putExtra("access", swapIcon);
         intent.putExtra("color", color);
         intent.putExtra("id", id);
-        intent.putExtra("change", true);
         intent.putStringArrayListExtra("labels", list);
         setResult(RESULT_OK, intent);
     }
