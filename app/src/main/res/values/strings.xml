@@ -12,6 +12,7 @@
     <string name="label_title">Label</string>
     <string name="sign_out_title">Sign out</string>
     <string name="exit_title">Exit</string>
+    <string name="help_title">Help</string>
     <string name="note_color">color</string>
     <string name="note_label">label</string>
     <string name="add_note">added</string>
@@ -19,4 +20,5 @@
     <string name="empty"></string>
     <string name="note_delete">delete</string>
     <string name="server_url">http://192.168.1.2:8080</string>
+    <string name="search_note">search note</string>
 </resources>

@@ -15,6 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.monz.project_note.app.database.NoteDBHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,12 +29,14 @@ public class RegistrationActivity extends Activity {
     private User user;
     private RequestQueue requestQueue;
     private String url;
+    private NoteDBHelper noteDBHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration_layout);
         url = getString(R.string.server_url);
         requestQueue = Volley.newRequestQueue(this);
+        noteDBHelper = new NoteDBHelper(this);
     }
     public void acceptClick(View v) {
         login = (EditText) findViewById(R.id.loginEdit);
@@ -56,6 +59,7 @@ public class RegistrationActivity extends Activity {
                         try {
                             Log.i("TAG", "User " + response.getString("name") + " created successfully");
                             user = new User(response.getString("name"), response.getString("pass"));
+                            noteDBHelper.addUser(user, true);
                             Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                             intent.putExtra("name", user.getUsername());
                             startActivity(intent);

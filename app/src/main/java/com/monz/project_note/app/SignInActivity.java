@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.monz.project_note.app.database.NoteDBHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,14 +26,24 @@ public class SignInActivity extends Activity {
     private User user;
     private RequestQueue requestQueue;
     private String url;
+    private NoteDBHelper noteDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppDefault);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in_layout);
+        noteDBHelper = new NoteDBHelper(this);
         requestQueue = Volley.newRequestQueue(this);
         url = getString(R.string.server_url);
+        String name = noteDBHelper.getActiveUser();
+
+        if (!name.equals("")) {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void signInClick(View v) {
@@ -46,23 +57,26 @@ public class SignInActivity extends Activity {
                 StringRequest.Method.POST, url + "/signin",
                 "{ \"name\": \"" + login.getText().toString() + "\", \"pass\": \"" + password.getText().toString() + "\"}",
                 new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Log.i("TAG", "User " + response.getString("name") + " authenticated successfully");
-                    user = new User(response.getString("name"), response.getString("pass"));
-                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                    intent.putExtra("name", user.getUsername());
-                    startActivity(intent);
-                    finish();
-                } catch (JSONException e) {
-                    Log.i("TAG", e.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Log.i("TAG", "User " + response.getString("name") + " authenticated successfully");
+                            user = new User(response.getString("name"), response.getString("pass"));
+                           if(!noteDBHelper.updateUser(user.getUsername(), true)){
+                               noteDBHelper.addUser(user, true);
+                           }
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            intent.putExtra("name", user.getUsername());
+                            startActivity(intent);
+                            finish();
+                        } catch (JSONException e) {
+                            Log.i("TAG", e.toString());
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i("TAG", "Authentication error "+ error.toString());
+                Log.i("TAG", "Authentication error " + error.toString());
             }
         });
         requestQueue.add(jsonRequest);

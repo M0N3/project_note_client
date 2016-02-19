@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.monz.project_note.app.adapter.CustomAlertAdapter;
 import com.monz.project_note.app.adapter.LabelListAdapter;
@@ -198,6 +199,7 @@ public class CreateNoteActivity extends AppCompatActivity implements AdapterView
                         myDialog = new android.app.AlertDialog.Builder(CreateNoteActivity.this);
                         final EditText editText = new EditText(CreateNoteActivity.this);
                         final ListView listview = new ListView(CreateNoteActivity.this);
+                        editText.setSingleLine(true);
                         editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_magnify, 0, 0, 0);
                         String[] arr = Label.getLabels().toArray(new String[Label.getLabels().size()]);
                         array_sort = new ArrayList<String>(Arrays.asList(arr));
@@ -221,6 +223,7 @@ public class CreateNoteActivity extends AppCompatActivity implements AdapterView
 
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
                                 editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                                editText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                                 textlength = editText.getText().length();
                                 array_sort.clear();
                                 for (int i = 0; i < Label.getLabels().size(); i++) {

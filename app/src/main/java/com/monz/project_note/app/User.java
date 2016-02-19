@@ -8,18 +8,13 @@ import java.util.List;
 public class User {
     private String username;
     private String password;
-    private List<Note> notes;
+
+    public String getPassword() {
+        return password;
+    }
 
     public String getUsername() {
         return username;
-    }
-
-    public List<Note> getNotes() {
-        return notes;
-    }
-
-    public void addNote(Note n) {
-        this.notes.add(n);
     }
 
     public User(String username, String password) {

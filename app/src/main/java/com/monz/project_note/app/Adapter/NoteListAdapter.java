@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     private List<Note> data;
     private static MyClickListener myClickListener;
     private LabelListAdapter lla;
-    private   LinearLayoutManager layoutManagerItem;
+ //   private LinearLayoutManager layoutManagerItem;
     private Context context;
 
-    public NoteListAdapter(List<Note> data, Context con)
-    {
+    public NoteListAdapter(List<Note> data, Context con) {
         this.data = data;
         this.context = con;
-       // this.layoutManagerItem = mn;
+        // this.layoutManagerItem = mn;
     }
 
     @Override
@@ -39,6 +39,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
         Note item = data.get(position);
+
+        lla = new LabelListAdapter(item.getLabels());
+        holder.rv.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        holder.rv.setAdapter(lla);
+
         holder.title.setText(item.getTitle());
         holder.author.setText(item.getAuthor());
         holder.date.setText(item.getDate());
@@ -46,17 +51,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
 //        lla = new LabelListAdapter(item.getLabels());
 //        holder.rv.setLayoutManager(layoutManagerItem);
 //        holder.rv.setAdapter(lla);
-        for(String str : item.getLabels()){
-            TextView tx = new TextView(context);
-            tx.setPadding(10,0,10,0);
-          tx.setBackgroundColor(Color.parseColor("#f2f2f2"));
-            tx.setText(str);
-            holder.layout.addView(tx);
-            TextView stx = new TextView(context);
-            stx.setText("  ");
-            holder.layout.addView(stx);
-
-        }
+//        for(String str : item.getLabels()){
+//            TextView tx = new TextView(context);
+//            tx.setPadding(10,0,10,0);
+//          tx.setBackgroundColor(Color.parseColor("#f2f2f2"));
+//            tx.setText(str);
+//            holder.layout.addView(tx);
+//            TextView stx = new TextView(context);
+//            stx.setText("  ");
+//            holder.layout.addView(stx);
+//
+//        }
         if (item.isCommon_access()) {
             holder.access.setText("Public");
         } else {
@@ -85,8 +90,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
         private TextView author;
         private TextView date;
         private TextView access;
+        private LinearLayout layout;
         private RecyclerView rv;
-        private   LinearLayout layout;
 
         public void setId(int id) {
             this.id = id;
@@ -108,12 +113,12 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.NoteVi
             super(itemView);
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.noteCardView);
+            rv = (RecyclerView) itemView.findViewById(R.id.noteRecyclerView);
             title = (TextView) itemView.findViewById(R.id.list_item_title);
             author = (TextView) itemView.findViewById(R.id.list_item_author);
             date = (TextView) itemView.findViewById(R.id.list_item_date);
             access = (TextView) itemView.findViewById(R.id.list_item_access);
-            layout = (LinearLayout) itemView.findViewById(R.id.label_layout);
-          //  rv = (RecyclerView) itemView.findViewById(R.id.noteRecyclerView);
+            //layout = (LinearLayout) itemView.findViewById(R.id.label_layout);
         }
 
         @Override

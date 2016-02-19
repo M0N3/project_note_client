@@ -19,6 +19,7 @@
         TITLE       TEXT,
         CONTENT     TEXT,
         PRIVATE     INTEGER,
+        LABEL       TEXT,
         UP_TO_DATE  INTEGER
         );
     </string>
@@ -32,8 +33,8 @@
     <string name="create_tag">
         CREATE TABLE TAG (
         _ID         INTEGER PRIMARY KEY AUTOINCREMENT,
-        TAG_NAME    INTEGER,
-        NOTE        INTEGER,
+        TAGS        TEXT,
+        USERNAME    TEXT,
         UP_TO_DATE  INTEGER
         );
     </string>

@@ -14,10 +14,24 @@ public class Label {
     public static LinkedHashSet<String> getLabels() {
         return labels;
     }
-    public static void addLabel(String str){
+
+    public static void setLabels(ArrayList<String> arr) {
+        labels.clear();
+            for (String str : arr) {
+                if(!str.equals(""))
+                labels.add(str);
+            }
+    }
+
+    public static void addLabel(String str) {
         labels.add(str);
     }
-    public static String getLabel(int position){
+
+    public static void remove(int position) {
+        labels.remove(labels.toArray()[position]);
+    }
+
+    public static String getLabel(int position) {
         return (String) labels.toArray()[position];
     }
 }

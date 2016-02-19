@@ -11,6 +11,11 @@
             android:icon="@mipmap/ic_tag_text_outline"
             android:id="@+id/menu_label_item"/>
     <item
+            android:title="@string/help_title"
+            android:orderInCategory="1"
+            android:icon="@mipmap/ic_help_circle"
+            android:id="@+id/menu_help_item"/>
+    <item
             android:title="@string/sign_out_title"
             android:orderInCategory="1"
             android:icon="@mipmap/ic_exit_to_app"
