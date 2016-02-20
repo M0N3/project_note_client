@@ -3,14 +3,15 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary">
+                android:background="@drawable/main_back">
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/titleText"
             android:textColor="@color/colorWhite"
-            android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+            android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -18,7 +19,7 @@
             android:text="@string/loginText"
             android:textColor="@color/colorWhite"
             android:id="@+id/loginView"
-            android:layout_marginTop="105dp" android:layout_below="@+id/titleView"
+            android:layout_marginTop="105dp"
             android:layout_centerHorizontal="true"/>
     <EditText
             android:layout_width="match_parent"
@@ -36,7 +37,7 @@
             android:layout_marginTop="44dp" android:layout_below="@+id/loginEdit"
             android:layout_centerHorizontal="true"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
@@ -44,19 +45,21 @@
             android:theme="@style/Theme.App.Base" android:layout_below="@+id/passwordView"
             android:layout_centerHorizontal="true"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/signinbtn"
             android:id="@+id/signinbtn"
             android:onClick="signInClick"
             android:layout_marginBottom="44dp" android:layout_above="@+id/registrationbtn"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorWhite"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/registrationbtn"
             android:id="@+id/registrationbtn"
             android:onClick="registrationClick"
             android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
-            android:layout_marginBottom="23dp"/>
+            android:layout_marginBottom="23dp"
+            android:textColor="@color/colorWhite"/>
 </RelativeLayout>

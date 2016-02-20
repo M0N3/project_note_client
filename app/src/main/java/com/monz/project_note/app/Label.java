@@ -2,13 +2,11 @@ package com.monz.project_note.app;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
-/**
- * Created by Андрей on 09.02.2016.
- */
 public class Label {
+
+    // Используем LinkedHashSet, потому что он не допускает повторов и
+    // поддерживает связный список элементов набора в том порядке, в котором они вставлялись
     private static LinkedHashSet<String> labels = new LinkedHashSet<>();
 
     public static LinkedHashSet<String> getLabels() {
@@ -16,13 +14,16 @@ public class Label {
     }
 
     public static void setLabels(ArrayList<String> arr) {
-        labels.clear();
-            for (String str : arr) {
-                if(!str.equals(""))
-                labels.add(str);
-            }
-    }
 
+        // Очищаем перед заполнением
+        labels.clear();
+        for (String str : arr) {
+            // Не добавляем пустые строки, если таковые присутствуют
+            if (!str.equals(""))
+                labels.add(str);
+        }
+
+    }
     public static void addLabel(String str) {
         labels.add(str);
     }

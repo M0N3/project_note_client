@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import com.monz.project_note.app.Label;
 import com.monz.project_note.app.Note;
 import com.monz.project_note.app.R;
@@ -15,38 +14,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Андрей on 13.02.2016.
- */
 public class NoteDBHelper extends SQLiteOpenHelper {
+
     private static final String DB_NAME = "NOTE_APP";
-    private static final int DB_VERSION = 56;
+
+    private static final int DB_VERSION = 58;
+
     private Context context;
+
     private SQLiteDatabase db;
 
+    // Создаем объект ДБ
     public NoteDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
         db = getWritableDatabase();
     }
 
-
+    // Создаем таблицы БД
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.v("DB", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         db.execSQL(context.getResources().getString(R.string.create_user));
         db.execSQL(context.getResources().getString(R.string.create_note));
-        db.execSQL(context.getResources().getString(R.string.create_tag_name));
         db.execSQL(context.getResources().getString(R.string.create_tag));
     }
 
+    // Разделитель, который используется для хранения строкового массива
+    // в БД как одного объекта типа String
     private static String strSeparator = "__,__";
 
+    // Преобразуем массив в строку
     private static String convertArrayToString(String[] array) {
         String str = "";
         for (int i = 0; i < array.length; i++) {
             str = str + array[i];
-            // Do not append comma at the end of last element
             if (i < array.length - 1) {
                 str = str + strSeparator;
             }
@@ -54,6 +55,7 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         return str;
     }
 
+    // Преобразуем строку в массив
     public static String[] convertStringToArray(String str) {
         String[] arr = str.split(strSeparator);
         return arr;
@@ -71,31 +73,19 @@ public class NoteDBHelper extends SQLiteOpenHelper {
     public boolean updateUser(String name, boolean isActive) {
         ContentValues values = new ContentValues();
         values.put("IS_ACTIVE", isActive);
-      int i =  db.update("USER", values, "NAME=" + "\"" + name + "\"", null);
+        int i = db.update("USER", values, "NAME=" + "\"" + name + "\"", null);
         return i > 0;
     }
 
-    //    int value = 10;
-//    Cursor cursor = database.query(
-//            "TABLE_X",
-//            new String[] { "COLUMN_A", "COLUMN_B" },
-//            "COLUMN_C = ?",
-//            new String[] { Integer.toString(value) },
-//            null,
-//            null,
-//            null);
+    // Активный юзер - юзер, который в данный момент залогинен в приложении
     public String getActiveUser() {
         String result = "";
         String[] from = {"IS_ACTIVE", "NAME", "PASSWORD", "UP_TO_DATE"};
         String where = "IS_ACTIVE = ?";
         String[] whereArgs = {Integer.toString(1)};
-        Log.i("TAG", "GETUSER");
         Cursor cursor = db.query(true, "USER", from, where, whereArgs, null, null, null, null);
-        // Log.i("TAG", Boolean.toString(cursor.moveToNext()));
         while (cursor.moveToNext()) {
             result = cursor.getString(1);
-            Log.i("TAG", "USERNAME");
-            Log.i("TAG", result);
         }
         return result;
     }
@@ -107,7 +97,6 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         values.put("USERNAME", name);
         values.put("UP_TO_DATE", false);
         db.insert("TAG", null, values);
-        Log.i("TAG", "ONCREATELABELS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     public void updateLabels(String name) {
@@ -127,8 +116,6 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             str = cursor.getString(2);
         }
-        Log.i("TAG", "PREPARE");
-        Log.i("TAG", str);
         return str.equals("");
     }
 
@@ -168,18 +155,17 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         values.put("NUMBER", note.getId());
         values.put("PRIVATE", !note.isCommon_access());
         values.put("DATE", note.getDate());
-        values.put("LABEL", convertArrayToString((String[]) note.getLabels().toArray(new String[0])));
+        values.put("LABEL", convertArrayToString(note.getLabels().toArray(new String[0])));
         values.put("UP_TO_DATE", false);
         db.update("NOTE", values, "NUMBER=" + note.getId(), null);
-        Log.i("TAG", "UPDATED");
     }
 
     public void deleteNote(Note note) {
-        Log.v("NOTE_DB", db.delete("NOTE", "NUMBER=" + note.getId(), null) + "");
+         db.delete("NOTE", "NUMBER=" + note.getId(), null);
     }
 
     public List<Note> getNotes(String username) {
-        List<Note> result = new ArrayList<Note>();
+        List<Note> result = new ArrayList<>();
         String[] from = {"USERNAME", "COLOR", "TITLE", "CONTENT", "PRIVATE", "UP_TO_DATE", "DATE", "NUMBER", "LABEL"};
         String where = "USERNAME=?";
         String[] whereArgs = {username};

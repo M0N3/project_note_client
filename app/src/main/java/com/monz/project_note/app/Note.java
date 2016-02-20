@@ -1,32 +1,30 @@
 package com.monz.project_note.app;
 
-import android.graphics.Color;
-
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
-/**
- * Created by Андрей on 29.01.2016.
- */
 public class Note {
 
     private String title;
+
     private String text;
+
     private boolean common_access;
+
     private String color;
+
     private String author;
+
     private String date;
+
     private int id;
+
+    // uniq - статическая переменная, которая инкрементирутся каждый раз при создании заметки (Note)
+    // что позволяет каждой змаетке иметь уникальный id
     private static int uniq = 0;
+
     private ArrayList<String> labels;
 
-    public ArrayList<String> getLabels() {
-        return labels;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setTitle(String title) { this.title = title; }
 
     public void setText(String text) {
         this.text = text;
@@ -40,21 +38,16 @@ public class Note {
         this.color = color;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public void setLabels(ArrayList<String> labels) {
         this.labels = labels;
     }
 
+    public ArrayList<String> getLabels() { return labels; }
+
     public int getId() {
         return id;
     }
+
     public String getText() {
         return text;
     }
@@ -68,11 +61,6 @@ public class Note {
         return color;
     }
 
-    public boolean isCommon_access() {
-
-        return common_access;
-    }
-
     public String getAuthor() {
         return author;
     }
@@ -80,6 +68,8 @@ public class Note {
     public String getDate() {
         return date;
     }
+
+    public boolean isCommon_access() { return common_access; }
 
     public Note(String title, String text, boolean common_access, String color, String author, String date, ArrayList<String> labels) {
         this.title = title;
@@ -93,6 +83,7 @@ public class Note {
         id = uniq;
     }
 
+    // этот конструктор используем, когда восстанавливаем данные из БД
     public Note(Integer id, String title, String text, boolean common_access, String color, String author, String date, ArrayList<String> labels) {
         this.title = title;
         this.text = text;
@@ -102,6 +93,8 @@ public class Note {
         this.date = date;
         this.labels = labels;
         this.id = id;
+        // т.к. id уже известны, а uniq = 0, находим максимальный id
+        // и присваиваем его uniq, таким образом он остается уникальным
         if (id >= uniq)
             uniq = id + 1;
     }

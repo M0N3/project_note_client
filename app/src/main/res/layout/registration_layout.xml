@@ -3,7 +3,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorPrimary">
+                android:background="@drawable/main_back">
 
     <TextView
             android:layout_width="wrap_content"
@@ -11,14 +11,15 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/titleText"
             android:textColor="@color/colorWhite"
-            android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+            android:id="@+id/titleView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+            android:layout_marginTop="31dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/loginText"
             android:textColor="@color/colorWhite"
-            android:id="@+id/loginView" android:layout_below="@+id/titleView" android:layout_centerHorizontal="true"
+            android:id="@+id/loginView" android:layout_centerHorizontal="true"
             android:layout_marginTop="102dp"/>
     <EditText
             android:layout_width="match_parent"
@@ -35,7 +36,7 @@
             android:id="@+id/passworView"
             android:layout_above="@+id/passwordEdit" android:layout_centerHorizontal="true"/>
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
@@ -44,7 +45,7 @@
             android:layout_alignLeft="@+id/password2Edit" android:layout_alignStart="@+id/password2Edit"/>
 
     <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
@@ -53,11 +54,12 @@
             android:layout_marginTop="32dp"
             android:theme="@style/Theme.App.Base"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="@string/acceptRegistrationText"
             android:id="@+id/acceptRegistrationbtn"
             android:onClick="acceptClick"
             android:layout_below="@+id/password2Edit" android:layout_centerHorizontal="true"
-            android:layout_marginTop="33dp"/>
+            android:layout_marginTop="33dp"
+            android:textColor="@color/colorWhite"/>
 </RelativeLayout>

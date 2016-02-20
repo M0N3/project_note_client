@@ -9,7 +9,6 @@
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="actionBarStyle">@style/ActionBar</item>
     </style>
-
     <style name="ActionBar"
            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/mainBackground</item>

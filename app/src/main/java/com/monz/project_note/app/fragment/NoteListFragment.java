@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.monz.project_note.app.R;
 
-/**
- * Created by Андрей on 16.02.2016.
- */
-public class LabelFragment extends Fragment{
+public class NoteListFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.label_fragment_layout, null);
+        return inflater.inflate(R.layout.note_fragment_layout, null);
     }
+
 }

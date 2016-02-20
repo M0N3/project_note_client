@@ -23,13 +23,6 @@
         UP_TO_DATE  INTEGER
         );
     </string>
-    <string name="create_tag_name">
-        CREATE TABLE TAG_NAME (
-        _ID         INTEGER PRIMARY KEY AUTOINCREMENT,
-        NAME        TEXT,
-        UP_TO_DATE  INTEGER
-        );
-    </string>
     <string name="create_tag">
         CREATE TABLE TAG (
         _ID         INTEGER PRIMARY KEY AUTOINCREMENT,
