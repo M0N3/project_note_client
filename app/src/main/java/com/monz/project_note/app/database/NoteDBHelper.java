@@ -18,7 +18,7 @@ public class NoteDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "NOTE_APP";
 
-    private static final int DB_VERSION = 58;
+    private static final int DB_VERSION = 65;
 
     private Context context;
 
@@ -45,14 +45,14 @@ public class NoteDBHelper extends SQLiteOpenHelper {
 
     // Преобразуем массив в строку
     private static String convertArrayToString(String[] array) {
-        String str = "";
-        for (int i = 0; i < array.length; i++) {
-            str = str + array[i];
-            if (i < array.length - 1) {
-                str = str + strSeparator;
-            }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length - 1; i++) {
+            sb.append(array[i]);
+            sb.append(strSeparator);
         }
-        return str;
+        if (array.length > 0)
+            sb.append(array[array.length - 1]);
+        return sb.toString();
     }
 
     // Преобразуем строку в массив
@@ -61,12 +61,21 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         return arr;
     }
 
+    public boolean userExist(String name){
+        String[] from = {"NAME"};
+        String where = "NAME = ?";
+        String[] whereArgs = { name };
+        Cursor cursor = db.query(true, "USER", from, where, whereArgs, null, null, null, null);
+        while (cursor.moveToNext()) {
+            return true;
+        }
+        return false;
+    }
     public void addUser(User user, Boolean isActive) {
         ContentValues values = new ContentValues();
         values.put("NAME", user.getUsername());
         values.put("PASSWORD", user.getPassword());
         values.put("IS_ACTIVE", isActive);
-        values.put("UP_TO_DATE", false);
         db.insert("USER", null, values);
     }
 
@@ -80,7 +89,7 @@ public class NoteDBHelper extends SQLiteOpenHelper {
     // Активный юзер - юзер, который в данный момент залогинен в приложении
     public String getActiveUser() {
         String result = "";
-        String[] from = {"IS_ACTIVE", "NAME", "PASSWORD", "UP_TO_DATE"};
+        String[] from = {"IS_ACTIVE", "NAME", "PASSWORD"};
         String where = "IS_ACTIVE = ?";
         String[] whereArgs = {Integer.toString(1)};
         Cursor cursor = db.query(true, "USER", from, where, whereArgs, null, null, null, null);
@@ -95,7 +104,6 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         String[] arr = Label.getLabels().toArray(new String[0]);
         values.put("TAGS", convertArrayToString(arr));
         values.put("USERNAME", name);
-        values.put("UP_TO_DATE", false);
         db.insert("TAG", null, values);
     }
 
@@ -103,25 +111,24 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         String[] arr = Label.getLabels().toArray(new String[0]);
         values.put("TAGS", convertArrayToString(arr));
-        values.put("UP_TO_DATE", false);
         db.update("TAG", values, "USERNAME=" + "\"" + name + "\"", null);
     }
 
     public Boolean isLabelsCreated(String username) {
         String str = "";
-        String[] from = {"TAGS", "UP_TO_DATE", "USERNAME"};
+        String[] from = {"TAGS", "USERNAME"};
         String where = "USERNAME=?";
         String[] whereArgs = {username};
         Cursor cursor = db.query(true, "TAG", from, where, whereArgs, null, null, null, null);
         while (cursor.moveToNext()) {
-            str = cursor.getString(2);
+            str = cursor.getString(1);
         }
         return str.equals("");
     }
 
     public ArrayList<String> getLabels(String username) {
         ArrayList<String> result = new ArrayList<>();
-        String[] from = {"TAGS", "UP_TO_DATE", "USERNAME"};
+        String[] from = {"TAGS", "USERNAME"};
         String where = "USERNAME=?";
         String[] whereArgs = {username};
         Cursor cursor = db.query(true, "TAG", from, where, whereArgs, null, null, null, null);
@@ -140,7 +147,6 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         values.put("NUMBER", note.getId());
         values.put("PRIVATE", !note.isCommon_access());
         values.put("DATE", note.getDate());
-        values.put("UP_TO_DATE", false);
         String[] arr = note.getLabels().toArray(new String[0]);
         values.put("LABEL", convertArrayToString(arr));
         db.insert("NOTE", null, values);
@@ -156,33 +162,32 @@ public class NoteDBHelper extends SQLiteOpenHelper {
         values.put("PRIVATE", !note.isCommon_access());
         values.put("DATE", note.getDate());
         values.put("LABEL", convertArrayToString(note.getLabels().toArray(new String[0])));
-        values.put("UP_TO_DATE", false);
         db.update("NOTE", values, "NUMBER=" + note.getId(), null);
     }
 
     public void deleteNote(Note note) {
-         db.delete("NOTE", "NUMBER=" + note.getId(), null);
+        db.delete("NOTE", "NUMBER=" + note.getId(), null);
     }
 
     public List<Note> getNotes(String username) {
         List<Note> result = new ArrayList<>();
-        String[] from = {"USERNAME", "COLOR", "TITLE", "CONTENT", "PRIVATE", "UP_TO_DATE", "DATE", "NUMBER", "LABEL"};
+        String[] from = {"USERNAME", "COLOR", "TITLE", "CONTENT", "PRIVATE",  "DATE", "NUMBER", "LABEL"};
         String where = "USERNAME=?";
         String[] whereArgs = {username};
         Cursor cursor = db.query(true, "NOTE", from, where, whereArgs, null, null, null, null);
         while (cursor.moveToNext()) {
             ArrayList<String> arr = new ArrayList<>();
-            if (!cursor.getString(8).equals("")) {
-                arr = new ArrayList<>(Arrays.asList(convertStringToArray(cursor.getString(8))));
+            if (!cursor.getString(7).equals("")) {
+                arr = new ArrayList<>(Arrays.asList(convertStringToArray(cursor.getString(7))));
             }
             Note note = new Note(
-                    cursor.getInt(7),
+                    cursor.getInt(6),
                     cursor.getString(2),
                     cursor.getString(3),
                     cursor.getInt(4) == 0,
                     cursor.getString(1),
                     cursor.getString(0),
-                    cursor.getString(6),
+                    cursor.getString(5),
                     arr
             );
             result.add(note);

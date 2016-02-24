@@ -84,7 +84,7 @@ public class RegistrationActivity extends Activity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(RegistrationActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistrationActivity.this, "User already exists, or connection to server lost", Toast.LENGTH_SHORT).show();
                 Log.i("TAG", "Registration error. User exists "+ error.toString());
             }
         });

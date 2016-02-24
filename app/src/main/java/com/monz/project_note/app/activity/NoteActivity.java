@@ -18,10 +18,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.monz.project_note.app.Label;
 import com.monz.project_note.app.R;
 import com.monz.project_note.app.adapter.ChangeLabelAlertAdapter;
 import com.monz.project_note.app.adapter.LabelListAdapter;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,39 +37,27 @@ import java.util.*;
 public class NoteActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private Toolbar toolbar;
-
     private RelativeLayout layout;
-
     private boolean swapIcon = false;
-
     private EditText title;
-
     private EditText text;
-
     private String color;
-
     private String date;
-
     private int id;
-
     private LabelListAdapter lla;
-
     private RecyclerView rv;
-
     private ArrayList<String> noteList;
-
     private ArrayList<String> array_sort;
-
     private int textLength = 0;
-
     private android.app.AlertDialog myAlertDialog = null;
-
     private android.app.AlertDialog.Builder myDialog;
-
     private android.support.v7.view.menu.ActionMenuItemView menuItemView;
+    private RequestQueue requestQueue;
+    private boolean editable;
 
     @Override
     public void onBackPressed() {
+        if(editable)
         returnData();
         finish();
         super.onBackPressed();
@@ -81,6 +77,8 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
         rv = (RecyclerView) findViewById(R.id.createNoteRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rv.setLayoutManager(layoutManager);
+        requestQueue = Volley.newRequestQueue(this);
+        editable = getIntent().getBooleanExtra("editable", true);
 
         initToolbar();
         // Если не новая заметка - инициализируем уже существующую
@@ -138,6 +136,7 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.add_note:
+                        if(editable)
                         returnData();
                         finish();
                         return true;
@@ -148,10 +147,10 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
                         labelHandler();
                         return true;
                     case R.id.note_access:
-                     accessHandler();
+                        accessHandler();
                         return true;
                     case R.id.note_delete:
-                      deleteHandler();
+                        deleteHandler();
                         return true;
                 }
                 return false;
@@ -250,8 +249,12 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
         myAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!editText.getText().toString().trim().equals(""))
+                if (!editText.getText().toString().trim().equals("")) {
                     Label.addLabel(editText.getText().toString());
+                    sendAddLabelRequest(editText.getText().toString());
+
+                }
+
                 editText.setText("");
                 editText.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.ic_magnify, 0, 0, 0);
             }
@@ -324,6 +327,26 @@ public class NoteActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
         builderSingle.show();
+    }
+
+    private void sendAddLabelRequest(String label) {
+        Log.v("TAG", "InLABELREQUEST");
+        JsonRequest jsonRequest = new JsonObjectRequest(
+                StringRequest.Method.PUT, getResources().getString(R.string.server_url) + "/addlabel",
+                "{ \"label\": \"" + label + "\" }",
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v("TAG", "Label added to server successfully");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TAG", "Label adding failed " + error.toString());
+            }
+        });
+        requestQueue.add(jsonRequest);
+        requestQueue.start();
     }
 
     @Override

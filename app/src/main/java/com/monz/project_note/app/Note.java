@@ -1,6 +1,7 @@
 package com.monz.project_note.app;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Note {
 
@@ -97,5 +98,33 @@ public class Note {
         // и присваиваем его uniq, таким образом он остается уникальным
         if (id >= uniq)
             uniq = id + 1;
+    }
+
+    public String toJSON() {
+        return "{" +
+                "\"author\": \"" + author + "\"" +
+                ", \"title\": \"" + title + "\"" +
+                ", \"text\": \"" + text + "\"" +
+                ", \"date\": \"" + date + "\"" +
+                ", \"access\": " + common_access +
+                ", \"number\": " + id +
+                ", \"color\": \"" + color + "\"" +
+                ", \"labels\": " + Arrays.toString(quoteArray(toStringArray(labels.toArray()))) +
+                "}";
+    }
+
+    private static String[] toStringArray(Object[] array) {
+        String[] result = new String[array.length];
+        for (int i = 0; i < array.length; i++) {
+            result[i] = array[i].toString();
+        }
+        return result;
+    }
+    private static String[] quoteArray(String[] array) {
+        String[] result = new String[array.length];
+        for (int i = 0; i < array.length; i++) {
+            result[i] = "\"" + array[i] + "\"";
+        }
+        return result;
     }
 }

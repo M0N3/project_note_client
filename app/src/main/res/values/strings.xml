@@ -19,6 +19,8 @@
     <string name="note_access">access</string>
     <string name="empty"></string>
     <string name="note_delete">delete</string>
-    <string name="server_url">http://192.168.1.4:8080</string>
+    <string name="server_url">http://94.179.211.12:3000</string>
     <string name="search_note">search note</string>
+    <string name="another_note">another note</string>
+    <string name="another_note_btn">Search</string>
 </resources>

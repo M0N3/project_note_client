@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,49 +23,48 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.monz.project_note.app.Label;
 import com.monz.project_note.app.Note;
 import com.monz.project_note.app.R;
 import com.monz.project_note.app.adapter.ChangeLabelAlertAdapter;
 import com.monz.project_note.app.adapter.NoteListAdapter;
 import com.monz.project_note.app.database.NoteDBHelper;
+import com.monz.project_note.app.fragment.AnotherNoteFragment;
 import com.monz.project_note.app.fragment.HelpFragment;
 import com.monz.project_note.app.fragment.LabelListFragment;
 import com.monz.project_note.app.fragment.NoteListFragment;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity implements android.support.v7.widget.SearchView.OnQueryTextListener {
 
     private Toolbar toolbar;
-
     private DrawerLayout drawerLayout;
-
     private RecyclerView rv;
-
     private List<Note> noteList;
-
+    private List<Note> anotherNotes;
     private NoteListAdapter nla;
-
     private NavigationView nv;
-
     private NoteDBHelper noteDBHelper;
-
     private NoteListFragment noteFragment;
-
     private FragmentManager manager;
-
     private FragmentTransaction transaction;
-
     private LabelListFragment labelFragment;
-
+    private AnotherNoteFragment anotherNoteFragment;
     private HelpFragment helpFragment;
-
     private ListView listView;
-
     private String username = null;
+    private String url;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppDefault);
         setContentView(R.layout.activity_main);
+        url = getString(R.string.server_url);
 
         // Если нету активного юзера
         if (username == null) {
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements android.support.v
         noteFragment = new NoteListFragment();
         labelFragment = new LabelListFragment();
         helpFragment = new HelpFragment();
+        anotherNoteFragment = new AnotherNoteFragment();
         manager = getSupportFragmentManager();
+        requestQueue = Volley.newRequestQueue(this);
 
         // Устанавливаем фрагмент с заметками в начале
         transaction = manager.beginTransaction();
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.titleText);
+        toolbar.setTitle(getResources().getString(R.string.note_title));
         toolbar.inflateMenu(R.menu.main_menu);
         setSupportActionBar(toolbar);
         // Обрабатываем клики по тулбар-меню
@@ -144,7 +147,8 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                     case R.id.note:
                         noteFragmentSetup();
                         return true;
-                    case R.id.search:
+                    case R.id.another_note:
+                        anotherNoteFragmentSetup();
                         return true;
                     case R.id.label:
                         labelFragmentSetup();
@@ -193,10 +197,14 @@ public class MainActivity extends AppCompatActivity implements android.support.v
     private void initNoteListAdapter() {
         nla = new NoteListAdapter(noteList, this);
         // Обрабатываем клик по заметке, и переходим к ее редактированию
+        initNLAClickListener(nla, noteList, true);
+    }
+
+    private void initNLAClickListener(NoteListAdapter nla, final List<Note> list, final Boolean editable) {
         nla.setOnItemClickListener(new NoteListAdapter.MyClickListener() {
             @Override
             public void onItemClick(int position, View v, NoteListAdapter.NoteViewHolder nvl) {
-                for (Note n : noteList) {
+                for (Note n : list) {
                     if (n.getId() == nvl.getId()) {
                         Intent intent = new Intent(MainActivity.this, NoteActivity.class);
                         intent.putExtra("new", false);
@@ -205,10 +213,11 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                         intent.putExtra("text", n.getText());
                         intent.putExtra("color", n.getColor());
                         intent.putExtra("id", n.getId());
+                        intent.putExtra("editable", editable);
                         NEW = false;
                         changed_note = n;
-                        noteList.remove(n);
-                        noteList.add(0, changed_note);
+                        list.remove(n);
+                        list.add(0, changed_note);
                         intent.putStringArrayListExtra("labels", n.getLabels());
                         startActivityForResult(intent, 1);
                         break;
@@ -219,21 +228,18 @@ public class MainActivity extends AppCompatActivity implements android.support.v
     }
 
     private boolean isNoteFragment = true;
+    private boolean isLabelFragment = false;
 
     private void noteFragmentSetup() {
         isNoteFragment = true;
-
-        // Скрываем кейбоард
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+        isLabelFragment = false;
+        hideKeyboard();
 
         transaction = manager.beginTransaction();
         transaction.replace(R.id.main_frameLayout, noteFragment);
         transaction.commit();
         manager.executePendingTransactions();
+        initNoteListAdapter();
         nla = new NoteListAdapter(noteList, this);
         rv = (RecyclerView) noteFragment.getView().findViewById(R.id.mainRecyclerView);
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -245,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
 
     private void labelFragmentSetup() {
         isNoteFragment = false;
+        isLabelFragment = true;
         transaction = manager.beginTransaction();
         transaction.replace(R.id.main_frameLayout, labelFragment);
         transaction.commit();
@@ -277,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                         }
                         nla = new NoteListAdapter(noteList, MainActivity.this);
                         rv.setAdapter(nla);
+                        String label = (String) Label.getLabels().toArray()[position];
                         Label.remove(position);
                         adapter.notifyDataSetChanged();
                         String[] arr = Label.getLabels().toArray(new String[Label.getLabels().size()]);
@@ -290,6 +298,16 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                 ad.show();
             }
         });
+    }
+
+    private void anotherNoteFragmentSetup() {
+        isNoteFragment = false;
+        isLabelFragment = false;
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.main_frameLayout, anotherNoteFragment);
+        transaction.commit();
+        manager.executePendingTransactions();
+        hideKeyboard();
     }
 
     @Override
@@ -332,8 +350,17 @@ public class MainActivity extends AppCompatActivity implements android.support.v
             rv.setAdapter(nla);
             isAttached = true;
         }
+        hideKeyboard();
     }
 
+    private void hideKeyboard() {
+        // Скрываем кейбоард
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -348,11 +375,14 @@ public class MainActivity extends AppCompatActivity implements android.support.v
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        hideKeyboard();
         super.onActivityResult(requestCode, resultCode, data);
         // Обрабатываем данные, которые вернулись после
         // создания или редактитрования заметки
-        if (data == null)
+        if (data == null || !isLabelFragment && !isNoteFragment) {
             return;
+        }
+
         boolean delete = data.getBooleanExtra("delete", false);
         if (delete) {
             if (!NEW) {
@@ -372,7 +402,9 @@ public class MainActivity extends AppCompatActivity implements android.support.v
         if (NEW) {
             Note note = new Note(title, text, access, color, getIntent().getStringExtra("name"), date, labels);
             noteList.add(0, note);
+            Log.v("TAG", "InAdded");
             noteDBHelper.addNote(note);
+            sendAddNoteRequest(note);
         } else {
             changed_note.setColor(color);
             changed_note.setText(text);
@@ -398,42 +430,90 @@ public class MainActivity extends AppCompatActivity implements android.support.v
     @Override
     public boolean onQueryTextSubmit(String query) {
         // Добавляем ярлык по клику в список ярлыков
-        if (!isNoteFragment) {
+        if (isLabelFragment) {
             if (!query.trim().equals("") && !Label.getLabels().contains(query)) {
                 Label.addLabel(query);
                 Toast.makeText(MainActivity.this, "Label added!", Toast.LENGTH_SHORT).show();
                 noteDBHelper.updateLabels(username);
             }
         }
+        hideKeyboard();
         return false;
     }
 
+
+    public void onAnotherNoteFragmentClick(View v) {
+        EditText ed = (EditText) findViewById(R.id.Edit_another_note);
+        final String query = ed.getText().toString();
+        ed.setText("");
+        anotherNotes = new ArrayList<>();
+        // Отправляем запрос на сервер
+        JsonRequest jsonRequest = new JsonObjectRequest(
+                StringRequest.Method.POST, url + "/getnotes",
+                "{ \"name\": \"" + query + "\"}",
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray JSONNotes = (JSONArray) response.get("getnotes");
+                            JSONArray JSONLabels = (JSONArray) response.get("getlabels");
+                            for (int i = 0; i < JSONNotes.length(); i++) {
+                                ArrayList<String> noteLabels = getLabels(JSONNotes.getJSONObject(i).getInt("Number"), JSONLabels);
+                                anotherNotes.add(new Note(
+                                        JSONNotes.getJSONObject(i).getString("Title"),
+                                        JSONNotes.getJSONObject(i).getString("Content"),
+                                        !JSONNotes.getJSONObject(i).getBoolean("Private"),
+                                        JSONNotes.getJSONObject(i).getString("Color"),
+                                        query,
+                                        JSONNotes.getJSONObject(i).getString("Date"),
+                                        noteLabels
+                                ));
+                            }
+                        } catch (JSONException e) {
+                            Log.i("TAG", e.toString());
+                        }
+                        initAnotherNotes(anotherNotes);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TAG", "ONRESPONSE ERROR " + error.getMessage());
+            }
+        });
+        requestQueue.add(jsonRequest);
+        requestQueue.start();
+    }
+
+    private ArrayList<String> getLabels(int number, JSONArray JSONLabels) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            for (int i = 0; i < JSONLabels.length(); i++) {
+                if (JSONLabels.getJSONObject(i).getInt("Note") == number) {
+                    list.add(JSONLabels.getJSONObject(i).getString("TagName"));
+                }
+            }
+        } catch (JSONException e) {
+            Log.i("TAG", e.toString());
+        }
+        return list;
+    }
+
+    private void initAnotherNotes(List<Note> anotherNotes) {
+        NoteListAdapter adapter = new NoteListAdapter(anotherNotes, MainActivity.this);
+        initNLAClickListener(nla, anotherNotes, false);
+        RecyclerView recycle = (RecyclerView) anotherNoteFragment.getView().findViewById(R.id.anotherRecyclerView);
+        recycle.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
+        recycle.setAdapter(adapter);
+    }
 
     @Override
     public boolean onQueryTextChange(String newText) {
         // Обрабатываем поиск по заметкам или ярлыкам
         int textLength = 0;
         if (isNoteFragment) {
-            textLength = newText.length();
-            List<Note> sort = new ArrayList<>();
-            for (int i = 0; i < noteList.size(); i++) {
-                if (textLength <= noteList.get(i).getTitle().length()) {
-                    if (noteList.get(i).getTitle().toLowerCase().contains(newText.toLowerCase().trim())) {
-                        sort.add(noteList.get(i));
-                    }
-                }
-                // Ищем и по названиям ярлыка в заметке тоже
-                for (int j = 0; j < noteList.get(i).getLabels().size(); j++) {
-                    if (textLength <= noteList.get(i).getLabels().get(j).length()) {
-                        if (noteList.get(i).getLabels().get(j).toLowerCase().contains(newText.toLowerCase().trim()) &&
-                                !sort.contains(noteList.get(i))) {
-                            sort.add(noteList.get(i));
-                        }
-                    }
-                }
-            }
+            List<Note> sort = noteSort(newText, noteList);
             rv.setAdapter(new NoteListAdapter(sort, MainActivity.this));
-        } else {
+        } else if (isLabelFragment) {
             textLength = newText.length();
             ArrayList<String> sort = new ArrayList<>();
             for (int i = 0; i < Label.getLabels().size(); i++) {
@@ -444,7 +524,53 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                 }
             }
             listView.setAdapter(new ChangeLabelAlertAdapter(MainActivity.this, sort, sort));
+        } else {
+            List<Note> sort = noteSort(newText, anotherNotes);
+            initAnotherNotes(sort);
         }
         return false;
+    }
+
+    private List<Note> noteSort(String newText, List<Note> list) {
+        int textLength = 0;
+        textLength = newText.length();
+        List<Note> sort = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (textLength <= list.get(i).getTitle().length()) {
+                if (list.get(i).getTitle().toLowerCase().contains(newText.toLowerCase().trim())) {
+                    sort.add(list.get(i));
+                }
+            }
+            // Ищем и по названиям ярлыка в заметке тоже
+            for (int j = 0; j < list.get(i).getLabels().size(); j++) {
+                if (textLength <= list.get(i).getLabels().get(j).length()) {
+                    if (list.get(i).getLabels().get(j).toLowerCase().contains(newText.toLowerCase().trim()) &&
+                            !sort.contains(list.get(i))) {
+                        sort.add(list.get(i));
+                    }
+                }
+            }
+        }
+        return sort;
+    }
+
+    private void sendAddNoteRequest(Note note) {
+        Log.v("TAG", "InREQUEST");
+        JsonRequest jsonRequest = new JsonObjectRequest(
+                StringRequest.Method.PUT, url + "/addnote",
+                note.toJSON(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.v("TAG", "Note added to server successfully");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TAG", "Note adding failed");
+            }
+        });
+        requestQueue.add(jsonRequest);
+        requestQueue.start();
     }
 }

@@ -80,10 +80,7 @@ public class SignInActivity extends Activity {
                             if (!noteDBHelper.updateUser(user.getUsername(), true)) {
                                 noteDBHelper.addUser(user, true);
                             }
-                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                            intent.putExtra("name", user.getUsername());
-                            startActivity(intent);
-                            finish();
+                            startMainActivity(user.getUsername());
                         } catch (JSONException e) {
                             Log.i("TAG", e.toString());
                         }
@@ -91,15 +88,25 @@ public class SignInActivity extends Activity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SignInActivity.this,
-                        "User does not exist or the incorrect password is entered!",
-                        Toast.LENGTH_SHORT).show();
-
+                if (noteDBHelper.userExist(login.getText().toString())){
+                    startMainActivity(login.getText().toString());
+                }else {
+                    Toast.makeText(SignInActivity.this,
+                            "User does not exist or the incorrect password is entered!",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
         requestQueue.add(jsonRequest);
         requestQueue.start();
 
+    }
+
+    private void startMainActivity(String name) {
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        intent.putExtra("name", name);
+        startActivity(intent);
+        finish();
     }
 
     public void registrationClick(View v) {

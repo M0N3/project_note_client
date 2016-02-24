@@ -5,8 +5,7 @@
         _ID         INTEGER PRIMARY KEY AUTOINCREMENT,
         NAME        TEXT,
         PASSWORD    TEXT,
-        IS_ACTIVE   INTEGER,
-        UP_TO_DATE  INTEGER
+        IS_ACTIVE   INTEGER
         );
     </string>
     <string name="create_note">
@@ -19,16 +18,14 @@
         TITLE       TEXT,
         CONTENT     TEXT,
         PRIVATE     INTEGER,
-        LABEL       TEXT,
-        UP_TO_DATE  INTEGER
+        LABEL       TEXT
         );
     </string>
     <string name="create_tag">
         CREATE TABLE TAG (
         _ID         INTEGER PRIMARY KEY AUTOINCREMENT,
         TAGS        TEXT,
-        USERNAME    TEXT,
-        UP_TO_DATE  INTEGER
+        USERNAME    TEXT
         );
     </string>
 </resources>
