@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="3. Для открытия бокового меню проведите21ё1 по экрану пальцем слева на право начиная с левого края."
+                android:text="3. Для открытия бокового меню проведите по экрану пальцем слева на право начиная с левого края."
                 android:id="@+id/textView3" android:layout_gravity="left"/>
         <TextView
                 android:layout_width="wrap_content"

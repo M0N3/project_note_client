@@ -461,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements android.support.v
                                 ArrayList<String> noteLabels = getLabels(JSONNotes.getJSONObject(i).getInt("Number"), JSONLabels);
                                 anotherNotes.add(new Note(
                                         JSONNotes.getJSONObject(i).getString("Title"),
-                                        JSONNotes.getJSONObject(i).getString("Content"),
+                                        JSONNotes.getJSONObject(i).getString("Content").replaceAll("xkl", "\n"),
                                         !JSONNotes.getJSONObject(i).getBoolean("Private"),
                                         JSONNotes.getJSONObject(i).getString("Color"),
                                         query,

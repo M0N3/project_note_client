@@ -25,7 +25,9 @@ public class Note {
 
     private ArrayList<String> labels;
 
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public void setText(String text) {
         this.text = text;
@@ -43,7 +45,9 @@ public class Note {
         this.labels = labels;
     }
 
-    public ArrayList<String> getLabels() { return labels; }
+    public ArrayList<String> getLabels() {
+        return labels;
+    }
 
     public int getId() {
         return id;
@@ -70,7 +74,9 @@ public class Note {
         return date;
     }
 
-    public boolean isCommon_access() { return common_access; }
+    public boolean isCommon_access() {
+        return common_access;
+    }
 
     public Note(String title, String text, boolean common_access, String color, String author, String date, ArrayList<String> labels) {
         this.title = title;
@@ -101,10 +107,13 @@ public class Note {
     }
 
     public String toJSON() {
+        // сервер не обрабатывает мультилайн строки, поэтому парсим в одну
+        // а знак переноса строки заменяем на "xkl", что б потом рапарсить обратно
+        String content = text.replaceAll("[\r\n]+", "xkl");
         return "{" +
                 "\"author\": \"" + author + "\"" +
                 ", \"title\": \"" + title + "\"" +
-                ", \"text\": \"" + text + "\"" +
+                ", \"text\": \"" + content + "\"" +
                 ", \"date\": \"" + date + "\"" +
                 ", \"access\": " + common_access +
                 ", \"number\": " + id +
@@ -120,6 +129,7 @@ public class Note {
         }
         return result;
     }
+
     private static String[] quoteArray(String[] array) {
         String[] result = new String[array.length];
         for (int i = 0; i < array.length; i++) {
